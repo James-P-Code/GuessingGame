@@ -34,13 +34,14 @@ void Tree::saveToFile(std::ofstream& saveFile, const Node* nodeToSave) const
 	}
 	else
 	{
-		saveFile << NULL_CHILD_MARKER << '\n';
+		saveFile << nullChildMarker << '\n';
 	}
 }
 
 /* This function is the public version of what is called to load the save file.  The reasoning here is that the node pointers
-*  are never exposed to outside classes, but loading the file will at first require a pointer to the root node.  This public
-*  function is meant to facilitate that process.  */
+*  are never exposed outside of this class, but loading the file will at first require a pointer to the root node.  This public
+*  function is meant to facilitate that process.  This function also does basic error checking on the file stream of the save file.
+*  If there is an error this function will return false, otherwise it will return true  */
 const bool Tree::loadFromFile()
 {
 	std::ifstream saveFile("questions.txt");
@@ -67,7 +68,7 @@ void Tree::loadFromFile(std::ifstream& saveFile, std::unique_ptr<Node>& nodeToLo
 	std::string fileInput;
 	std::getline(saveFile, fileInput);
 
-	if (fileInput.front() != NULL_CHILD_MARKER)
+	if (fileInput.front() != nullChildMarker)
 	{
 		nodeToLoad = std::make_unique<Node>(fileInput);
 		loadFromFile(saveFile, nodeToLoad->positiveNode);
@@ -83,12 +84,12 @@ void Tree::loadFromFile(std::ifstream& saveFile, std::unique_ptr<Node>& nodeToLo
 *  at the end of the game) is changed to the new question the user provided.  The new tree is then saved to the save file.   */
 void Tree::addNewQuestion(const std::string& newGuess, const std::string& newQuestion, const char yesOrNo)
 {
-	if (yesOrNo == 'Y')
+	if (yesOrNo == positiveResponse)
 	{
 		currentNode->positiveNode = std::make_unique<Node>(newGuess);
 		currentNode->negativeNode = std::make_unique<Node>(currentNode->message);
 	}
-	else if (yesOrNo == 'N')
+	else if (yesOrNo == negativeResponse)
 	{
 		currentNode->negativeNode = std::make_unique<Node>(newGuess);
 		currentNode->positiveNode = std::make_unique<Node>(currentNode->message);
@@ -126,11 +127,11 @@ const bool Tree::isCurrentNodeLeaf() const
 *  track of the current position within the tree.  This function moves down the tree based on the user's yes/no response  */
 void Tree::moveBasedOnResponse(const char yesOrNo)
 {
-	if (yesOrNo == 'Y')
+	if (yesOrNo == positiveResponse)
 	{
 		currentNode = currentNode->positiveNode.get();
 	}
-	else if (yesOrNo == 'N')
+	else if (yesOrNo == negativeResponse)
 	{
 		currentNode = currentNode->negativeNode.get();
 	}

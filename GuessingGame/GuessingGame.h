@@ -3,29 +3,32 @@
 #include <iostream>
 #include <limits> // std::numeric_limits<std::streamsize>::max()
 #include <string>
-#include <array>
 #include "Tree.h"
+
+/* This class runs the actual game part of this project.  This includes asking questions, getting responses to those questions,
+*  attempting to guess what the user is thinking of, getting new info from the user in the case of an incorrect guess and
+*  asking the user if they want to play the game again.  */
 
 class GuessingGame
 {
+public:
+	void startGame();
+	const bool errorStatus();
+
 private:
-	static constexpr int PREVIOUS_QUESTION_AMOUNT = 5;
-	static constexpr char POSITIVE_RESPONSE = 'Y';
-	static constexpr char NEGATIVE_RESPONSE = 'N';
+	static constexpr int previousQuestionAmount = 5;  // how many recent questions and responses should be saved, used to size the array
+	static constexpr char positiveResponse = 'Y';
+	static constexpr char negativeResponse = 'N';
 	Tree questionTree;
-	std::string previousQandA[PREVIOUS_QUESTION_AMOUNT];
-	std::array<std::pair<std::string, char>, PREVIOUS_QUESTION_AMOUNT> previousQuestions;
+	std::string previousQandA[previousQuestionAmount];
+	int currentQuestionNumber = 0; // used as an index for the previous questions and answers array
 	bool errorStatusState = false;
 
 	void askQuestion();
+	const char yesOrNoResponse() const;
+	void saveQuestionAndResponse(const std::string& nodeMessage, const char yesOrNo);
 	void makeGuess(const std::string& nodeMessage);
 	void getNewQuestion(const std::string& nodeMessage);
-	const char yesOrNoResponse() const;
 	void playAgain();
-	void saveQuestionAndResponse(const std::string& nodeMessage, const char yesOrNo);
-
-public:
-	GuessingGame();
-	void startGame();
-	const bool errorStatus();
+	void resetArray();
 };

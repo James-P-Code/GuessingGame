@@ -4,11 +4,23 @@ Does it meow?
 Cat
 #
 #
+Is it bigger than a car?
+Does it have a very long neck?
+Giraffe
+#
+#
+Elephant
+#
+#
 Dog
 #
 #
-Does it walk on 8 legs?
-Spider
+Does it live in the ocean?
+Does it have very sharp teeth?
+Shark
+#
+#
+Whale
 #
 #
 Human

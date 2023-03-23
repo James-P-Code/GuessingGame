@@ -1,14 +1,10 @@
 #include "GuessingGame.h"
 
-GuessingGame::GuessingGame()
-{
-	for (auto& pq : previousQuestions)
-	{
-		pq.first = "";
-		pq.second = ' ';
-	}
-}
-
+/* This is the main function to start the game.  It will call a function that attempts to load saved data from a text file
+*  into the tree.  If there is something wrong with the file stream it will output an error message and ask the user if
+*  they would like to create a new save file with a small amount of default questions.  If the user does not choose to create
+*  a new save file it set the error state boolean to true and then return to main().  If the file loads correctly or the user
+*  does create a new file in the case of an error it will then call the function that starts the process of asking questions   */
 void GuessingGame::startGame()
 {
 	std::cout << "Guessing Game!\nPlease think of an object and I will try to guess it!\n\n";
@@ -17,7 +13,7 @@ void GuessingGame::startGame()
 	{
 		std::cerr << "Error loading file!";
 		std::cout << "\nWould you like to create a new file?\n";
-		if (yesOrNoResponse() == POSITIVE_RESPONSE)
+		if (yesOrNoResponse() == positiveResponse)
 		{
 			questionTree.createNewTreeFile();
 		}
@@ -28,18 +24,19 @@ void GuessingGame::startGame()
 		}
 	}
 
-	if (questionTree.getMessage().empty())
-	{
-		std::cerr << "Error loading questions!";
-		errorStatusState = true;
-		return;
-	}
-	else
-	{
-		askQuestion();
-	}
+	askQuestion();
 }
 
+// Used to report the error status in the event that the save file could not properly load
+const bool GuessingGame::errorStatus()
+{
+	return errorStatusState;
+}
+
+/*  This function retrieves the string data from the current node of the tree.  While the current node of the tree is not a leaf node
+*   it will ask questions, and get the user's response to those questions.  It will also call other functions that save the question and
+*   response to an array, and move down the tree based on the user's response.  If the current node of the tree has no child nodes it will
+*   not ask a question and instead call a function that attepmts to guess what the user is thinking of.   */
 void GuessingGame::askQuestion()
 {
 	std::string nodeMessage = questionTree.getMessage();
@@ -52,6 +49,7 @@ void GuessingGame::askQuestion()
 		saveQuestionAndResponse(nodeMessage, userRespone);
 		questionTree.moveBasedOnResponse(userRespone);
 		nodeMessage = questionTree.getMessage();
+		currentQuestionNumber++;
 	}
 
 	makeGuess(nodeMessage);
@@ -69,38 +67,31 @@ const char GuessingGame::yesOrNoResponse() const
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  //  we only want the first character so we'll ignore everything else
 		userResponse = std::toupper(userResponse);  // we'll just validate against uppercase Y or N
 
-		if (userResponse != POSITIVE_RESPONSE && userResponse != NEGATIVE_RESPONSE)
+		if (userResponse != positiveResponse && userResponse != negativeResponse)
 		{
 			std::cout << "Invalid Response!  Please try again...\n";
 		}
-	}  while (userResponse != POSITIVE_RESPONSE && userResponse != NEGATIVE_RESPONSE);
+	} while (userResponse != positiveResponse && userResponse != negativeResponse);
 
 	return userResponse;
 }
 
-void GuessingGame::playAgain()
+// Saves some of the recent questions and responses to an array
+void GuessingGame::saveQuestionAndResponse(const std::string& question, const char userResponse)
 {
-	std::cout << "Would you like to play again?\n";
-	
-	if (yesOrNoResponse() == POSITIVE_RESPONSE)
-	{
-		questionTree.resetTreePosition();
-		askQuestion();
-	}
-	else
-	{
-		std::cout << "Thank you for playing!\n";
-	}
+	previousQandA[currentQuestionNumber % previousQuestionAmount] = question + " YOUR RESPONSE: ";
+	previousQandA[currentQuestionNumber % previousQuestionAmount].append(userResponse == positiveResponse ? "Yes" : "No");
 }
 
 /* This function will be called once the tree comes to a node that is a leaf (a node with null child nodes).
 *  A leaf node in this tree means that there are no more questions to ask, and it is time to guess what the
-*  user might be thinking of  */
+*  user might be thinking of.  If the program does not correctly guess what the user is thinking of it will
+*  call a function that gets info from the user to add to the tree   */
 void GuessingGame::makeGuess(const std::string& guess)
 {
 	std::cout << "Are you thinking of " << guess << "?\n";
 
-	if (yesOrNoResponse() == POSITIVE_RESPONSE)
+	if (yesOrNoResponse() == positiveResponse)
 	{
 		std::cout << "\nI win!!!\n";
 		playAgain();
@@ -113,10 +104,10 @@ void GuessingGame::makeGuess(const std::string& guess)
 
 /* If the program did not correctly guess what the user was thinking of it will prompt the user for
 *  information so that it might be able to guess that object in the future.  The user will be prompted
-*  to enter what object they were thinking of, a Yes/No question to help guess that object, and the answer
-*  to that question.  The tree will then be updated with this new info.  The current Node (the object that
-*  the program guessed) will be updated to instead contain the user's new question.  The positive and negative
-*  nodes will be updated with the object that was just guessed, and the object the user was thinking of. */
+*  to enter what object they were thinking of, and then a a brief reminder of some of the recent questions
+*	and responses will be displayed.  The user will then be asked to enter a new Yes/No question that
+*   can be added to the tree for future sessions.  Finally, it will ask the user if they would like to
+*   play again   */
 void GuessingGame::getNewQuestion(const std::string& guess)
 {
 	std::string newGuess, newQuestion;
@@ -125,18 +116,23 @@ void GuessingGame::getNewQuestion(const std::string& guess)
 	std::cout << "\nWhat were you thinking of?\n";
 	std::getline(std::cin, newGuess);
 
-	std::cout << "As a reminder here are the previous " << PREVIOUS_QUESTION_AMOUNT << " questions and responses:\n";
-	
-	for (const auto& prev : previousQuestions)
+	std::cout << "As a reminder here are a few of the previous questions and responses:\n";
+
+	for (const std::string& previousQuestion : previousQandA)
 	{
-		if (!prev.first.empty())
+		if (!previousQuestion.empty())
 		{
-			std::cout << prev.first << " Your Response: " << prev.second << '\n';
+			std::cout << previousQuestion << '\n';
 		}
 	}
 
-	std::cout << "\nPlease enter a Yes/No question to help me distinguish " << guess << " from " << newGuess << '\n';
+	std::cout << "\nPlease enter a question that can be answered with Yes/No to help me distinguish " << guess << " from " << newGuess << '\n';
 	std::getline(std::cin, newQuestion);
+
+	if (newQuestion.back() != '?')
+	{
+		newQuestion += '?';
+	}
 
 	std::cout << "What is the answer to your question for " << newGuess << '\n';
 	newQuestionAnswer = yesOrNoResponse();
@@ -145,32 +141,29 @@ void GuessingGame::getNewQuestion(const std::string& guess)
 	playAgain();
 }
 
-void GuessingGame::saveQuestionAndResponse(const std::string& question, const char userResponse)
+// Asks the user if they would like to play again, and if so it resets the game to a starting state, otherwise it displays a quit message
+void GuessingGame::playAgain()
 {
-	if (previousQuestions.back().first.empty())
+	std::cout << "Would you like to play again?\n";
+	
+	if (yesOrNoResponse() == positiveResponse)
 	{
-		for (size_t i = 0; i < PREVIOUS_QUESTION_AMOUNT; ++i)
-		{
-			if (previousQuestions[i].first.empty())
-			{
-				previousQuestions[i].first = question;
-				previousQuestions[i].second = userResponse;
-				break;
-			}
-		}
+		currentQuestionNumber = 0;
+		resetArray();
+		questionTree.resetTreePosition();
+		askQuestion();
 	}
 	else
 	{
-		for (size_t i = 0; i < PREVIOUS_QUESTION_AMOUNT - 1; ++i)
-		{
-			previousQuestions[i + 1] = previousQuestions[i];
-		}
-		previousQuestions.front().first = question;
-		previousQuestions.front().second = userResponse;
+		std::cout << "Thank you for playing!\n";
 	}
 }
 
-const bool GuessingGame::errorStatus()
+// Resets the array of recent questions and responses, used if the player wants to play again
+void GuessingGame::resetArray()
 {
-	return errorStatusState;
+	for (std::string& previousQuestion : previousQandA)
+	{
+		previousQuestion.clear();
+	}
 }

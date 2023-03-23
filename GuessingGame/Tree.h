@@ -29,7 +29,9 @@ private:
 
 	std::unique_ptr<Node> root;
 	Node* currentNode = nullptr; // used to track the current position within the tree
-	static constexpr char NULL_CHILD_MARKER = '#'; // used in the save file for marking null nodes
+	static constexpr char nullChildMarker = '#'; // used in the save file for marking null nodes
+	static constexpr char positiveResponse = 'Y';
+	static constexpr char negativeResponse = 'N';
 
 	void saveToFile(std::ofstream& saveFile, const Node* nodeToSave) const;
 	void loadFromFile(std::ifstream& saveFile, std::unique_ptr<Node>& nodeToLoad);
