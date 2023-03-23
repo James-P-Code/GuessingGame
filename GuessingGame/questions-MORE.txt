@@ -1,0 +1,47 @@
+Is it alive?
+Does it walk on 4 legs?
+Does it moo?
+Cow
+#
+#
+Does it meow?
+Cat
+#
+#
+Dog
+#
+#
+Does it fly?
+Bird
+#
+#
+Does it swim?
+Fish
+#
+#
+Does it slither?
+Snake
+#
+#
+Human
+#
+#
+Does it have wheels?
+Does it have 4 wheels?
+Car
+#
+#
+Is it powered by an engine?
+Motorcycle
+#
+#
+Bicycle
+#
+#
+Is it made out of wood?
+Desk
+#
+#
+Computer
+#
+#

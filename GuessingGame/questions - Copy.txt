@@ -1,0 +1,15 @@
+Is it alive?
+Does it walk on 4 legs?
+Dog
+#
+#
+Human
+#
+#
+Does it have wheels?
+Car
+#
+#
+Computer
+#
+#

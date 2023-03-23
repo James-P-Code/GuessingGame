@@ -1,0 +1,23 @@
+Is it alive?
+Does it walk on 4 legs?
+Does it meow?
+Cat
+#
+#
+Dog
+#
+#
+Does it walk on 8 legs?
+Spider
+#
+#
+Human
+#
+#
+Does it have wheels?
+Car
+#
+#
+Computer
+#
+#
