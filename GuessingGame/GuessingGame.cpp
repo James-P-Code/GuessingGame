@@ -1,10 +1,14 @@
+// Author:  James Pochas
+// Date:  March 23, 2023
+// Assignment:  M3 Capstone Project: Design-Draft a Program
+
 #include "GuessingGame.h"
 
-/* This is the main function to start the game.  It will call a function that attempts to load saved data from a text file
-*  into the tree.  If there is something wrong with the file stream it will output an error message and ask the user if
-*  they would like to create a new save file with a small amount of default questions.  If the user does not choose to create
-*  a new save file it set the error state boolean to true and then return to main().  If the file loads correctly or the user
-*  does create a new file in the case of an error it will then call the function that starts the process of asking questions   */
+// This is the main function to start the game.  It will call a function that attempts to load saved data from a text file
+// into the tree.  If there is something wrong with the file stream it will output an error message and ask the user if
+// they would like to create a new save file with a small amount of default questions.  If the user does not choose to create
+//  a new save file it set the error state boolean to true and then return to main().  If the file loads correctly or the user
+// does create a new file in the case of an error it will then call the function that starts the process of asking questions
 void GuessingGame::startGame()
 {
 	std::cout << "Guessing Game!\nPlease think of an object and I will try to guess it!\n\n";
@@ -28,15 +32,15 @@ void GuessingGame::startGame()
 }
 
 // Used to report the error status in the event that the save file could not properly load
-const bool GuessingGame::errorStatus()
+const bool GuessingGame::errorStatus() const
 {
 	return errorStatusState;
 }
 
-/*  This function retrieves the string data from the current node of the tree.  While the current node of the tree is not a leaf node
-*   it will ask questions, and get the user's response to those questions.  It will also call other functions that save the question and
-*   response to an array, and move down the tree based on the user's response.  If the current node of the tree has no child nodes it will
-*   not ask a question and instead call a function that attepmts to guess what the user is thinking of.   */
+// This function retrieves the string data from the current node of the tree.  While the current node of the tree is not a leaf node
+//  it will ask questions, and get the user's response to those questions.  It will also call other functions that save the question and
+//  response to an array, and move down the tree based on the user's response.  If the current node of the tree has no child nodes it will
+//  not ask a question and instead call a function that attepmts to guess what the user is thinking of
 void GuessingGame::askQuestion()
 {
 	std::string nodeMessage = questionTree.getMessage();
@@ -83,10 +87,10 @@ void GuessingGame::saveQuestionAndResponse(const std::string& question, const ch
 	previousQandA[currentQuestionNumber % previousQuestionAmount].append(userResponse == positiveResponse ? "Yes" : "No");
 }
 
-/* This function will be called once the tree comes to a node that is a leaf (a node with null child nodes).
-*  A leaf node in this tree means that there are no more questions to ask, and it is time to guess what the
-*  user might be thinking of.  If the program does not correctly guess what the user is thinking of it will
-*  call a function that gets info from the user to add to the tree   */
+// This function will be called once the tree comes to a node that is a leaf (a node with null child nodes).
+// A leaf node in this tree means that there are no more questions to ask, and it is time to guess what the
+// user might be thinking of.  If the program does not correctly guess what the user is thinking of it will
+// call a function that gets info from the user to add to the tree
 void GuessingGame::makeGuess(const std::string& guess)
 {
 	std::cout << "Are you thinking of " << guess << "?\n";
@@ -102,12 +106,12 @@ void GuessingGame::makeGuess(const std::string& guess)
 	}
 }
 
-/* If the program did not correctly guess what the user was thinking of it will prompt the user for
-*  information so that it might be able to guess that object in the future.  The user will be prompted
-*  to enter what object they were thinking of, and then a a brief reminder of some of the recent questions
-*	and responses will be displayed.  The user will then be asked to enter a new Yes/No question that
-*   can be added to the tree for future sessions.  Finally, it will ask the user if they would like to
-*   play again   */
+// If the program did not correctly guess what the user was thinking of it will prompt the user for
+// information so that it might be able to guess that object in the future.  The user will be prompted
+// to enter what object they were thinking of, and then a a brief reminder of some of the recent questions
+// and responses will be displayed.  The user will then be asked to enter a new Yes/No question that
+// can be added to the tree for future sessions.  Finally, it will ask the user if they would like to
+// play again
 void GuessingGame::getNewQuestion(const std::string& guess)
 {
 	std::string newGuess, newQuestion;
@@ -141,7 +145,7 @@ void GuessingGame::getNewQuestion(const std::string& guess)
 	playAgain();
 }
 
-// Asks the user if they would like to play again, and if so it resets the game to a starting state, otherwise it displays a quit message
+// Ask the user if they would like to play again, and if so reset the game to a starting state, otherwise display a quit message
 void GuessingGame::playAgain()
 {
 	std::cout << "Would you like to play again?\n";

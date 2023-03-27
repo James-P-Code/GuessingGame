@@ -30,6 +30,10 @@ Does it have wheels?
 Car
 #
 #
+Is it made out of wood?
+Desk
+#
+#
 Computer
 #
 #

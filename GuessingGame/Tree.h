@@ -1,18 +1,21 @@
+// Author:  James Pochas
+// Date:  March 23, 2023
+// Assignment:  M3 Capstone Project: Design-Draft a Program
+
 #pragma once
 
-#include <iostream>
 #include <string>
 #include <fstream>
 #include <memory>
 
-/* This class defines the binary tree structure that is a core part of this program.  
-*  The main structure of the tree consists of Nodes, where each node contains a string that represents
-*  either a question to ask or an item to guess.  Each Node can also point to 2 child Nodes, where each
-*  child nodes represents the data that will be used depending on the user's yes/no answer to a question.
-*  A yes answer corresponds with the positiveNode, and a no answer to a negativeNode.
-*  Additionally the class also keeps track of the root node of the entire tree structure, as well as the
-*  game's current position within the tree (currentNode).  This class is designed to never expose any of
-*  these pointers outside of the class.  */
+// This class defines the binary tree structure that is a core part of this program.  
+// The main structure of the tree consists of Nodes, where each node contains a string that represents
+// either a question to ask or an item to guess.  Each Node can also point to 2 child Nodes, where each
+// child nodes represents the data that will be used depending on the user's yes/no answer to a question.
+// A yes answer corresponds with the positiveNode, and a no answer to a negativeNode.
+// Additionally the class also keeps track of the root node of the entire tree structure, as well as the
+// game's current position within the tree (currentNode).  This class is designed to never expose any of
+// these pointers outside of the class
 
 class Tree
 {

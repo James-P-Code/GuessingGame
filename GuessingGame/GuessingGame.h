@@ -1,3 +1,7 @@
+// Author:  James Pochas
+// Date:  March 23, 2023
+// Assignment:  M3 Capstone Project: Design-Draft a Program
+
 #pragma once
 
 #include <iostream>
@@ -5,15 +9,15 @@
 #include <string>
 #include "Tree.h"
 
-/* This class runs the actual game part of this project.  This includes asking questions, getting responses to those questions,
-*  attempting to guess what the user is thinking of, getting new info from the user in the case of an incorrect guess and
-*  asking the user if they want to play the game again.  */
+// This class runs the actual game part of this project.  This includes asking questions, getting responses to those questions,
+// attempting to guess what the user is thinking of, getting new info from the user in the case of an incorrect guess and
+// asking the user if they want to play the game again
 
 class GuessingGame
 {
 public:
 	void startGame();
-	const bool errorStatus();
+	const bool errorStatus() const;
 
 private:
 	static constexpr int previousQuestionAmount = 5;  // how many recent questions and responses should be saved, used to size the array
