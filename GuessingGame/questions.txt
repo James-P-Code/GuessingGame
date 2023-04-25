@@ -27,6 +27,10 @@ Human
 #
 #
 Does it have wheels?
+Does it have 2 wheels?
+Motorcycle
+#
+#
 Car
 #
 #

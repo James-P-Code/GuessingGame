@@ -1,6 +1,6 @@
 // Author:  James Pochas
-// Date:  March 23, 2023
-// Assignment:  M3 Capstone Project: Design-Draft a Program
+// Date:  April 15, 2023
+// Assignment:  M3 Capstone Project: Capstone Preparation
 
 #pragma once
 
@@ -17,6 +17,7 @@
 // game's current position within the tree (currentNode).  This class is designed to never expose any of
 // these pointers outside of the class
 
+// Requirement # 4: Variables
 class Tree
 {
 private:

@@ -1,6 +1,6 @@
 // Author:  James Pochas
-// Date:  March 23, 2023
-// Assignment:  M3 Capstone Project: Design-Draft a Program
+// Date:  April 15, 2023
+// Assignment:  M4 Capstone Project: Capstone Preparation
 
 #pragma once
 
@@ -13,6 +13,7 @@
 // attempting to guess what the user is thinking of, getting new info from the user in the case of an incorrect guess and
 // asking the user if they want to play the game again
 
+// Requirement #4:  Variables
 class GuessingGame
 {
 public:
